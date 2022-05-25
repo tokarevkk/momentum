@@ -31,7 +31,7 @@ h2 {
 }
 
 @media ( max-width: 700px ){
-   #time{
+   #time {
       font-size: 6rem;
    }
 }

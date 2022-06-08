@@ -5,7 +5,22 @@ const time = document.getElementById("time"),
   focus = document.getElementById("focus"),
   newDate = document.getElementById("data"),
   newMonth = document.getElementById("mth");
-
+  const monthTitle = [
+   "January",
+   "February",
+   "March",
+   "April",
+   "May",
+   "June",
+   "July",
+   "August",
+   "September",
+   "October",
+   "November",
+   "December",
+  ];
+ 
+  
 // SHOW time
 function showTime() {
   let today = new Date(),
@@ -34,23 +49,10 @@ function addZero(n) {
 function showMonth() {
   let today = new Date(),
     mth = today.getMonth();
-  const monthTitle = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  
   newMonth.innerHTML = monthTitle[mth];
 }
-showMonth();
+
 
 function showDay() {
   let today = new Date(),
@@ -58,38 +60,37 @@ function showDay() {
 
   newDate.innerHTML = day;
 }
-showDay();
 
 // Change BG and greting
 function setBg() {
   let today = new Date(),
     hour = today.getHours();
-  if (hour < 12) {
-    // Morning
-    document.body.style.backgroundImage = "url('../img/1.jpg')";
-    greeting.textContent = "Good morning";
-    document.body.style.color = "white";
-  } else if (hour < 18) {
-    // Afternoon
-    document.body.style.backgroundImage = "url('../img/2.jpg')";
-    greeting.textContent = "Good Afnernoon";
-    document.body.style.color = "white";
-  } else if (hour < 24) {
-    //Evening
-    document.body.style.backgroundImage = "url('../img/3.jpg')";
-    greeting.textContent = "Good Evening";
-    document.body.style.color = "white";
-  } else if (hour < 6) {
-    // Night
-    document.body.style.backgroundImage = "url('../img/4.jpg')";
-    greeting.textContent = "Good Night";
-    document.body.style.color = "white";
-  }
+    if (hour < 6) {
+      // Night
+      document.body.style.backgroundImage = "url('../img/4.jpg')";
+      greeting.textContent = "Good Night";
+      document.body.style.color = "white";
+    } else if (hour < 12) {
+      // Morning
+      document.body.style.backgroundImage = "url('../img/1.jpg')";
+      greeting.textContent = "Good morning";
+      document.body.style.color = "white";
+    } else if (hour < 18) {
+      //Afternoon
+      document.body.style.backgroundImage = "url('../img/2.jpg')";
+      greeting.textContent = "Good Afnernoon";
+      document.body.style.color = "white";
+    } else if (hour < 24) {
+      // Evening
+      document.body.style.backgroundImage = "url('../img/3.jpg')";
+      greeting.textContent = "Good Evening";
+      document.body.style.color = "white";
+    }
 }
+
 
 // Get Name
 function getName() {
-  // const name = document.getElementById('name');
   if (localStorage.getItem("name") === null) {
     userName.textContent = "[Enter name]";
   } else {
@@ -103,7 +104,6 @@ const handleBlur = (e, key) => {
   if (currentName == null || currentName == "") {
     e.target.innerText = key ==='name' ? '[EnterName]' : '[EnterFocus]'
   }
-  console.log(currentName);
 };
 
 const handleInputKeypress = (e) => {
@@ -123,15 +123,22 @@ function getFocus() {
 }
 
 const clearInput = (e) => {
-  e.target.innerHTML = "";
-  // console.log(userName.innerHTML)
+   e.target.innerHTML = "";
 };
 
+
+// Eventlistenners 
+
 userName.addEventListener("keypress", handleInputKeypress);
+
 userName.addEventListener("blur", (event) => handleBlur(event, "name"));
+
 focus.addEventListener("keypress", handleInputKeypress);
+
 focus.addEventListener("blur", (event) => handleBlur(event, "focus"));
+
 userName.addEventListener("click", clearInput);
+
 focus.addEventListener("click", clearInput);
 
 // RUN
@@ -139,3 +146,5 @@ showTime();
 setBg();
 getName();
 getFocus();
+showMonth();
+showDay();

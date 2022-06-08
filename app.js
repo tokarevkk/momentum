@@ -1,104 +1,150 @@
 //DOM Elements
-const time = document.getElementById('time'),
-   greeting = document.getElementById('greeting'),
-   userName = document.getElementById('name'),
-   focus = document.getElementById('focus');
-
+const time = document.getElementById("time"),
+  greeting = document.getElementById("greeting"),
+  userName = document.getElementById("name"),
+  focus = document.getElementById("focus"),
+  newDate = document.getElementById("data"),
+  newMonth = document.getElementById("mth");
+  const monthTitle = [
+   "January",
+   "February",
+   "March",
+   "April",
+   "May",
+   "June",
+   "July",
+   "August",
+   "September",
+   "October",
+   "November",
+   "December",
+  ];
+ 
+  
 // SHOW time
 function showTime() {
-   let today = new Date(),
-      hour = today.getHours(),
-      min = today.getMinutes(),
-      sec = today.getSeconds();
-   
-   // Set AM or PM
-   const amPm = hour >= 12 ? 'PM' : 'AM';
+  let today = new Date(),
+    hour = today.getHours(),
+    min = today.getMinutes(),
+    sec = today.getSeconds();
 
-   // Hour format
-   hour = hour % 12 || 12;
-   // Output time 
-   time.innerHTML = `${hour}<span>:</span>${addZero(min)}<span>:</span>${addZero(sec)}`;
-   setTimeout(showTime, 1000);
+  // Set AM or PM
+  const amPm = hour >= 12 ? "PM" : "AM";
+
+  // Hour format
+  hour = hour % 12 || 12;
+  // Output time
+  time.innerHTML = `${hour}<span>:</span>${addZero(min)}<span>:</span>${addZero(
+    sec
+  )}`;
+  setTimeout(showTime, 1000);
 }
 
 function addZero(n) {
-   return (parseInt(n, 10) < 10 ? '0' : " ") + n;
+  return (parseInt(n, 10) < 10 ? "0" : " ") + n;
 }
+
+//Month and Day
+
+function showMonth() {
+  let today = new Date(),
+    mth = today.getMonth();
+  
+  newMonth.innerHTML = monthTitle[mth];
+}
+
+
+function showDay() {
+  let today = new Date(),
+    day = today.getDate();
+
+  newDate.innerHTML = day;
+}
+
 // Change BG and greting
 function setBg() {
-   let today = new Date(),
-   hour = today.getHours();
-   if (hour < 12) {
+  let today = new Date(),
+    hour = today.getHours();
+    if (hour < 6) {
+      // Night
+      document.body.style.backgroundImage = "url('../img/4.jpg')";
+      greeting.textContent = "Good Night";
+      document.body.style.color = "white";
+    } else if (hour < 12) {
       // Morning
       document.body.style.backgroundImage = "url('../img/1.jpg')";
-      greeting.textContent = 'Good morning';
-      document.body.style.color = 'white';
-   } else if (hour < 18){
-      // Afternoon
+      greeting.textContent = "Good morning";
+      document.body.style.color = "white";
+    } else if (hour < 18) {
+      //Afternoon
       document.body.style.backgroundImage = "url('../img/2.jpg')";
-      greeting.textContent = 'Good Afnernoon';
-      document.body.style.color = 'white';
-   } else {
-      //Evening
+      greeting.textContent = "Good Afnernoon";
+      document.body.style.color = "white";
+    } else if (hour < 24) {
+      // Evening
       document.body.style.backgroundImage = "url('../img/3.jpg')";
-      greeting.textContent = 'Good Evening';
-      document.body.style.color = 'white';
-   }
+      greeting.textContent = "Good Evening";
+      document.body.style.color = "white";
+    }
 }
+
 
 // Get Name
 function getName() {
-   // const name = document.getElementById('name');
-   if (localStorage.getItem('name') === null) {
-      userName.textContent = '[Enter name]';
-   } else {
-      userName.textContent = localStorage.getItem('name')
-   }
+  if (localStorage.getItem("name") === null) {
+    userName.textContent = "[Enter name]";
+  } else {
+    userName.textContent = localStorage.getItem("name");
+  }
 }
 
-//setName
-function setName(e) {
-   if (e.type === 'keypress') {
-      // Make shure enter is pressed
-      if (e.which == 13 || e.keyCode == 13) {
-         localStorage.setItem('name', e.target.innerText);
-         userName.blur();
-      }
-   } else {
-      localStorage.setItem ('name', e.target.innerText);
-   }
-}
+const handleBlur = (e, key) => {
+  localStorage.setItem(key, e.target.innerText);
+  const currentName = localStorage.getItem(key);
+  if (currentName == null || currentName == "") {
+    e.target.innerText = key ==='name' ? '[EnterName]' : '[EnterFocus]'
+  }
+};
+
+const handleInputKeypress = (e) => {
+  if (e.keyCode == 13) {
+    localStorage.setItem("name", e.target.innerText);
+    e.target.blur();
+  }
+};
 
 //Get Focus
 function getFocus() {
-   if (localStorage.getItem('focus') === null) {
-      focus.textContent = ' [Enter Focus]';
-   } else {
-      focus.textContent = localStorage.getItem('focus')
-   }
+  if (localStorage.getItem("focus") === null) {
+    focus.textContent = " [Enter Focus]";
+  } else {
+    focus.textContent = localStorage.getItem("focus");
+  }
 }
 
-function setFocus(e) {
-   if (e.type === 'keypress') {
-      // Make shure enter is pressed
-      if (e.which == 13 || e.keyCode == 13) {
-         localStorage.setItem('focus', e.target.innerText);
-         focus.blur();
-      }
-   } else {
-      localStorage.setItem ('focus', e.target.innerText);
-   }
-}
-userName.addEventListener('keypress', setFocus);
-userName.addEventListener('blur', setFocus);
-focus.addEventListener('keypress', setFocus);
-focus.addEventListener('blur', setFocus);
+const clearInput = (e) => {
+   e.target.innerHTML = "";
+};
 
+
+// Eventlistenners 
+
+userName.addEventListener("keypress", handleInputKeypress);
+
+userName.addEventListener("blur", (event) => handleBlur(event, "name"));
+
+focus.addEventListener("keypress", handleInputKeypress);
+
+focus.addEventListener("blur", (event) => handleBlur(event, "focus"));
+
+userName.addEventListener("click", clearInput);
+
+focus.addEventListener("click", clearInput);
 
 // RUN
 showTime();
 setBg();
 getName();
 getFocus();
-setName()
-setFocus();
+showMonth();
+showDay();
